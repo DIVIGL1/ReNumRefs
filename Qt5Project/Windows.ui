@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>469</width>
+    <width>700</width>
     <height>528</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>469</width>
+    <width>700</width>
     <height>528</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>469</width>
+    <width>700</width>
     <height>528</height>
    </size>
   </property>
@@ -46,7 +46,7 @@
      <rect>
       <x>10</x>
       <y>30</y>
-      <width>451</width>
+      <width>681</width>
       <height>21</height>
      </rect>
     </property>
@@ -58,6 +58,9 @@
     </property>
     <property name="whatsThis">
      <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Выберите файл в браузере и с помощью мышки &quot;бросьте&quot; его на эту форму.</string>
     </property>
     <property name="readOnly">
      <bool>true</bool>
@@ -68,9 +71,15 @@
      <rect>
       <x>10</x>
       <y>10</y>
-      <width>171</width>
+      <width>191</width>
       <height>16</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Имя документа (файла):</string>
@@ -81,9 +90,15 @@
      <rect>
       <x>10</x>
       <y>60</y>
-      <width>281</width>
+      <width>361</width>
       <height>16</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Имя обработанного (итогового) документа (файла):</string>
@@ -94,7 +109,7 @@
      <rect>
       <x>10</x>
       <y>80</y>
-      <width>451</width>
+      <width>681</width>
       <height>21</height>
      </rect>
     </property>
@@ -107,27 +122,11 @@
     <property name="whatsThis">
      <string notr="true"/>
     </property>
+    <property name="text">
+     <string>Выберите файл в браузере и с помощью мышки &quot;бросьте&quot; его на эту форму.</string>
+    </property>
     <property name="readOnly">
      <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QTextBrowser" name="refs_found">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>130</y>
-      <width>451</width>
-      <height>181</height>
-     </rect>
-    </property>
-    <property name="toolTip">
-     <string notr="true"/>
-    </property>
-    <property name="statusTip">
-     <string notr="true"/>
-    </property>
-    <property name="whatsThis">
-     <string notr="true"/>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
@@ -139,6 +138,12 @@
       <height>16</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
     <property name="text">
      <string>Обнаружены ссылки:</string>
     </property>
@@ -146,24 +151,39 @@
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>550</x>
       <y>320</y>
-      <width>171</width>
+      <width>131</width>
       <height>16</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="text">
      <string>Ошибки замены:</string>
     </property>
    </widget>
-   <widget class="QTextBrowser" name="refs_error">
+   <widget class="QPlainTextEdit" name="refs_found">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>340</y>
-      <width>451</width>
+      <y>130</y>
+      <width>681</width>
       <height>181</height>
      </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>300</width>
+      <height>0</height>
+     </size>
     </property>
     <property name="toolTip">
      <string notr="true"/>
@@ -173,6 +193,105 @@
     </property>
     <property name="whatsThis">
      <string notr="true"/>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="plainText">
+     <string notr="true">Выберите файл в браузере и с помощью мышки &quot;бросьте&quot; его на эту форму.</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="refs_error">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>549</x>
+      <y>340</y>
+      <width>141</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string notr="true"/>
+    </property>
+    <property name="statusTip">
+     <string notr="true"/>
+    </property>
+    <property name="whatsThis">
+     <string notr="true"/>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="refs_result">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>340</y>
+      <width>531</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>300</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string notr="true"/>
+    </property>
+    <property name="statusTip">
+     <string notr="true"/>
+    </property>
+    <property name="whatsThis">
+     <string notr="true"/>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="plainText">
+     <string notr="true">Выберите файл в браузере и с помощью мышки &quot;бросьте&quot; его на эту форму.</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>320</y>
+      <width>171</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Итоговая сортировка:</string>
     </property>
    </widget>
   </widget>
