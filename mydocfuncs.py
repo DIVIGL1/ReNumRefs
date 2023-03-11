@@ -63,10 +63,46 @@ def find_refs_list(doc_object):
     return found_refs
 
 
-def replace_refs_in_text(doc_object, old_ref, new_ref):
+def replace_refs_in_doc(doc_object, old_ref, new_ref):
     for one_paragraph in doc_object.paragraphs:
+        collect_ref_parts_in_one_run_and_replace(one_paragraph, old_ref, new_ref)
         for one_run in one_paragraph.runs:
             one_run.text = one_run.text.replace(old_ref, new_ref)
+
+
+def collect_ref_parts_in_one_run_and_replace(one_paragraph, old_ref, new_ref):
+    while old_ref in one_paragraph.text:
+        text = one_paragraph.text
+        start_idx = text.find(old_ref)
+        end_idx = start_idx + len(old_ref) - 1
+        char_idx_counter = 0
+        for num_run, one_run in enumerate(one_paragraph.runs):
+            this_run_text = one_run.text
+            for one_char in this_run_text:
+                char_idx_counter += 1
+                if char_idx_counter < start_idx + 1:
+                    # Это ещё не начло ссылки
+                    continue
+                if char_idx_counter == start_idx + 1:
+                    # Это самое начало ссылки!
+                    # Запомним в каком пробеге она началась:
+                    begin_ref_num_run = num_run
+                elif char_idx_counter <= end_idx + 1 and num_run == begin_ref_num_run:
+                    # Это продолжение ссылки. Пробег тот же. Ничего не делаем.
+                    continue
+                elif char_idx_counter <= end_idx + 1 and num_run != begin_ref_num_run:
+                    # Это продолжение ссылки, которое попало в другой пробег.
+                    # Её надо перенести в правильный пробег.
+                    # 1) Перенесём символ в правильный пробег:
+                    one_paragraph.runs[begin_ref_num_run].text = one_paragraph.runs[begin_ref_num_run].text + one_char
+                    # 2) Уберём этот символ из начала "неправильного" пробега:
+                    one_paragraph.runs[num_run].text = one_paragraph.runs[num_run].text[1:]
+                else:
+                    # Всё ссылка закончилась.
+                    # Заменим ссылку на новую и переходим к обработке следующей.
+                    one_paragraph.runs[begin_ref_num_run].text = one_paragraph.runs[begin_ref_num_run].text.replace(old_ref, new_ref)
+                    break
+
 
 
 def replace_ref_paragraphs(doc_object, ordered_refs, refs_list):
@@ -77,7 +113,7 @@ def replace_ref_paragraphs(doc_object, ordered_refs, refs_list):
                 new_paragraph_text = one_paragraph[2]
                 new_paragraph_text = f"{num_ref + 1}. {new_paragraph_text[(len(one_ref)):].strip()}"
                 update_paragraph(doc_object.paragraphs[paragraph_poz], new_paragraph_text)
-                replace_refs_in_text(doc_object, one_ref, f"{num_ref + 1}")
+                replace_refs_in_doc(doc_object, one_ref, f"{num_ref + 1}")
 
                 break
 
