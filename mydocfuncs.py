@@ -42,7 +42,7 @@ def get_all_refs_in_text(doc_object):
                 if new_mark not in found_refs_in_text:
                     found_refs_in_text.append(new_mark)
 
-            paragraph_text = paragraph_text[(start_poz + 1):]
+            paragraph_text = paragraph_text[(len(new_mark) + 1):]
 
             start_poz = paragraph_text.find(REFS_START_CHAR_IN_TEXT)
 
@@ -58,6 +58,8 @@ def find_refs_list(doc_object):
                 for one_char in REFS_STOP_CHARS:
                     paragraph_text = paragraph_text.split(one_char)[0]
 
+                # После завершения цикла в переменной paragraph_text остаётся
+                # ссылка на этот параграф типа ##001 и она записывается на первом месте:
                 found_refs.append([paragraph_text, num_paragraph, one_paragraph.text.strip()])
 
     return found_refs
@@ -104,8 +106,10 @@ def collect_ref_parts_in_one_run_and_replace(one_paragraph, old_ref, new_ref):
                     break
 
 
-
 def replace_ref_paragraphs(doc_object, ordered_refs, refs_list):
+    refs_result = []
+    # Переберём все параграфы из списка литературы и расположим
+    # их в том порядке в каком на них встречаются ссылки в тексте:
     for num_ref, one_ref in enumerate(ordered_refs):
         paragraph_poz = refs_list[num_ref][1]
         for one_paragraph in refs_list:
@@ -114,8 +118,11 @@ def replace_ref_paragraphs(doc_object, ordered_refs, refs_list):
                 new_paragraph_text = f"{num_ref + 1}. {new_paragraph_text[(len(one_ref)):].strip()}"
                 update_paragraph(doc_object.paragraphs[paragraph_poz], new_paragraph_text)
                 replace_refs_in_doc(doc_object, one_ref, f"{num_ref + 1}")
+                refs_result.append(new_paragraph_text)
 
                 break
+
+    return refs_result
 
 
 def get_refs_errors(doc_object, ordered_refs):
