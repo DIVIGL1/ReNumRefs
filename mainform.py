@@ -8,6 +8,9 @@ from PyQt5 import QtGui, QtWidgets
 from myconstants import *
 import mydocfuncs
 import myQt_form
+from myutils import (
+    load_param, save_param
+)
 
 
 class QtMainWindow(myQt_form.Ui_MainWindow):
@@ -30,6 +33,17 @@ class MyWindow(QtWidgets.QMainWindow):
 
         self.ui.refs_found.setWordWrapMode(QtGui.QTextOption.NoWrap)
         self.ui.refs_error.setWordWrapMode(QtGui.QTextOption.NoWrap)
+        self.ui.refs_result.setWordWrapMode(QtGui.QTextOption.NoWrap)
+
+        # Установим исходные (сохранённые) координаты и размеры:
+        data = load_param(PARAMETER_SAVED_MAIN_WINDOW_POZ, "")
+        if data:
+            self.restoreGeometry(data)
+
+    def moveEvent(self, event):
+        super(MyWindow, self).moveEvent(event)
+        data = self.saveGeometry()
+        save_param(PARAMETER_SAVED_MAIN_WINDOW_POZ, data)
 
     def dragEnterEvent(self, event):
         if event.mimeData().hasUrls():
@@ -56,17 +70,33 @@ class MyWindow(QtWidgets.QMainWindow):
         all_ordered_refs = mydocfuncs.get_all_refs_in_text(doc_object)
         all_refs_list = mydocfuncs.find_refs_list(doc_object)
 
+        # Подготовим полный список ссылок и выведем его для информации на форму:
         full_list = ""
         for element in all_refs_list:
             full_list = full_list + element[2] + '\n'
 
         self.ui.refs_found.setPlainText(full_list)
 
-        mydocfuncs.replace_ref_paragraphs(doc_object, all_ordered_refs, all_refs_list)
+        # В полном списке ссылок из текста могут оказаться ссылки,
+        # которых нет в списке литературы - это ошибки.
+        # Найдём их, сохраним и удалим.
+        all_only_refs_list = [x[0] for x in all_refs_list]
+        good_ordered_refs = all_ordered_refs.copy()
+        for element in all_ordered_refs:
+            if element not in all_only_refs_list:
+                good_ordered_refs.remove(element)
 
+        # В итоге обрабатываем только те ссылки,
+        # для которых есть запись в списке литературы:
+        refs_result = mydocfuncs.replace_ref_paragraphs(doc_object, good_ordered_refs, all_refs_list)
+        self.ui.refs_result.setPlainText('\n'.join(refs_result))
+
+        # Выведем для информации на форму список ссылок из текста (ошибки),
+        # для которых не нашлась соответствующая ссылка в списке литературы
+        # или по каким-то причинам не произошла замена:
         errors = mydocfuncs.get_refs_errors(doc_object, all_ordered_refs)
         if errors:
-            errors_in_text = f"Не исправленных ссылок: {len(errors)} шт.:\n"
+            errors_in_text = f"Не исправлено: {len(errors)} шт.:\n"
             for element in errors:
                 errors_in_text = errors_in_text + element + '\n'
 
@@ -74,6 +104,7 @@ class MyWindow(QtWidgets.QMainWindow):
         else:
             self.ui.refs_error.setPlainText("- нет -")
 
+        # Сохраним копию документа с исправленными ссылками:
         mydocfuncs.save_docx_object(doc_object, file_dst_name)
 
 
