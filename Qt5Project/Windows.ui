@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>700</width>
-    <height>528</height>
+    <height>650</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>700</width>
-    <height>528</height>
+    <height>650</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>700</width>
-    <height>528</height>
+    <height>650</height>
    </size>
   </property>
   <property name="acceptDrops">
@@ -134,7 +134,7 @@
      <rect>
       <x>10</x>
       <y>110</y>
-      <width>171</width>
+      <width>381</width>
       <height>16</height>
      </rect>
     </property>
@@ -145,14 +145,14 @@
      </font>
     </property>
     <property name="text">
-     <string>Обнаружены ссылки:</string>
+     <string>Обнаружен список литературы:</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
     <property name="geometry">
      <rect>
-      <x>550</x>
-      <y>320</y>
+      <x>561</x>
+      <y>530</y>
       <width>131</width>
       <height>16</height>
      </rect>
@@ -210,10 +210,10 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>549</x>
-      <y>340</y>
-      <width>141</width>
-      <height>181</height>
+      <x>560</x>
+      <y>550</y>
+      <width>131</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -246,7 +246,7 @@
      <rect>
       <x>10</x>
       <y>340</y>
-      <width>531</width>
+      <width>681</width>
       <height>181</height>
      </rect>
     </property>
@@ -280,7 +280,7 @@
      <rect>
       <x>10</x>
       <y>320</y>
-      <width>171</width>
+      <width>321</width>
       <height>16</height>
      </rect>
     </property>
@@ -291,7 +291,63 @@
      </font>
     </property>
     <property name="text">
-     <string>Итоговая сортировка:</string>
+     <string>Итоговая сортировка списка литературы:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>530</y>
+      <width>461</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Не использованные в тексте источники из списка литературы:</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="refs_not_used">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>550</y>
+      <width>541</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>300</width>
+      <height>0</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string notr="true"/>
+    </property>
+    <property name="statusTip">
+     <string notr="true"/>
+    </property>
+    <property name="whatsThis">
+     <string notr="true"/>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: rgb(0, 0, 0);</string>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+    <property name="plainText">
+     <string notr="true">Выберите файл в браузере и с помощью мышки &quot;бросьте&quot; его на эту форму.</string>
     </property>
    </widget>
   </widget>
