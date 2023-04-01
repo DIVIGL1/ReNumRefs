@@ -3,6 +3,7 @@ REFS_START_CHAR_IN_TEXT = "##"
 REFS_STOP_CHARS = ' ,];)'
 FILE_EXTENSION = '.docx'
 PARAMETER_SAVED_MAIN_WINDOW_POZ = "Позиция и размер MainWindow"
+TEXT_NO_INFORMATION = "- отсутствуют -"
 
 
 __ALL__ = [
@@ -11,4 +12,5 @@ __ALL__ = [
     'REFS_START_CHAR_IN_TEXT',
     'FILE_EXTENSION',
     'PARAMETER_SAVED_MAIN_WINDOW_POZ',
+    'TEXT_NO_INFORMATION',
 ]
