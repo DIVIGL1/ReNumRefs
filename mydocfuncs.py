@@ -23,33 +23,39 @@ def update_paragraph(paragraph, new_text):
     return paragraph
 
 
-def get_all_refs_in_text(doc_object):
+def get_all_refs(doc_object, p_only_in_text=False):
+    # Если передан параметр p_only_in_text равный True,
+    # то проверяется начало строки и если в самом начале
+    # стоит две "решётки", то строка игнорируется!
     found_refs_in_text = []
     for one_paragraph in doc_object.paragraphs:
         paragraph_text = one_paragraph.text
         start_poz = paragraph_text.find(REFS_START_CHAR_IN_TEXT)
-        while start_poz != -1:
-            end_poz = 0
-            paragraph_text = paragraph_text[start_poz:]
-            if len(paragraph_text) >= (len(REFS_START_CHAR_IN_TEXT) + 2):
-                for poz, selected_char in enumerate(paragraph_text):
-                    if selected_char in REFS_STOP_CHARS:
-                        end_poz = poz
-                        break
+        if p_only_in_text and start_poz == 0:
+            pass
+        else:
+            while start_poz != -1:
+                end_poz = 0
+                paragraph_text = paragraph_text[start_poz:]
+                if len(paragraph_text) >= (len(REFS_START_CHAR_IN_TEXT) + 2):
+                    for poz, selected_char in enumerate(paragraph_text):
+                        if selected_char in REFS_STOP_CHARS:
+                            end_poz = poz
+                            break
 
-            if end_poz != 0:
-                new_mark = paragraph_text[0:end_poz]
-                if new_mark not in found_refs_in_text:
-                    found_refs_in_text.append(new_mark)
+                if end_poz != 0:
+                    new_mark = paragraph_text[0:end_poz]
+                    if new_mark not in found_refs_in_text:
+                        found_refs_in_text.append(new_mark)
 
-            paragraph_text = paragraph_text[(len(new_mark) + 1):]
+                paragraph_text = paragraph_text[(len(new_mark) + 1):]
 
-            start_poz = paragraph_text.find(REFS_START_CHAR_IN_TEXT)
+                start_poz = paragraph_text.find(REFS_START_CHAR_IN_TEXT)
 
     return found_refs_in_text
 
 
-def find_refs_list(doc_object):
+def find_refs_in_list(doc_object):
     found_refs = []
     for num_paragraph, one_paragraph in enumerate(doc_object.paragraphs):
         paragraph_text = one_paragraph.text.strip()
@@ -146,10 +152,10 @@ def save_docx_object(doc_object, file_name):
 
 if __name__ == "__main__":
     doc = get_docx_object(TEST_READ_FILE)
-    all_ordered_refs = get_all_refs_in_text(doc)
+    all_ordered_refs = get_all_refs(doc)
     print(all_ordered_refs)
 
-    all_refs_list = find_refs_list(doc)
+    all_refs_list = find_refs_in_list(doc)
     print(all_refs_list)
 
     replace_ref_paragraphs(doc, all_ordered_refs, all_refs_list)

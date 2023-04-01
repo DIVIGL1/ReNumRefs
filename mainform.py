@@ -34,6 +34,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.refs_found.setWordWrapMode(QtGui.QTextOption.NoWrap)
         self.ui.refs_error.setWordWrapMode(QtGui.QTextOption.NoWrap)
         self.ui.refs_result.setWordWrapMode(QtGui.QTextOption.NoWrap)
+        self.ui.refs_not_used.setWordWrapMode(QtGui.QTextOption.NoWrap)
 
         # Установим исходные (сохранённые) координаты и размеры:
         data = load_param(PARAMETER_SAVED_MAIN_WINDOW_POZ, "")
@@ -67,12 +68,12 @@ class MyWindow(QtWidgets.QMainWindow):
         file_dst_name = os.path.splitext(file_src_name)[0] + ' (new)' + os.path.splitext(file_src_name)[1]
 
         doc_object = mydocfuncs.get_docx_object(docx_files[0])
-        all_ordered_refs = mydocfuncs.get_all_refs_in_text(doc_object)
-        all_refs_list = mydocfuncs.find_refs_list(doc_object)
+        all_ordered_refs = mydocfuncs.get_all_refs(doc_object)
+        all_refs_in_list = mydocfuncs.find_refs_in_list(doc_object)
 
         # Подготовим полный список ссылок и выведем его для информации на форму:
         full_list = ""
-        for element in all_refs_list:
+        for element in all_refs_in_list:
             full_list = full_list + element[2] + '\n'
 
         self.ui.refs_found.setPlainText(full_list)
@@ -80,15 +81,31 @@ class MyWindow(QtWidgets.QMainWindow):
         # В полном списке ссылок из текста могут оказаться ссылки,
         # которых нет в списке литературы - это ошибки.
         # Найдём их, сохраним и удалим.
-        all_only_refs_list = [x[0] for x in all_refs_list]
+        all_only_refs_list = [x[0] for x in all_refs_in_list]
         good_ordered_refs = all_ordered_refs.copy()
         for element in all_ordered_refs:
             if element not in all_only_refs_list:
                 good_ordered_refs.remove(element)
 
+        # В полном списке литературы могут оказаться ссылки,
+        # которые не используются в тексте. Найдём их:
+        all_refs_only_in_text = mydocfuncs.get_all_refs(doc_object, p_only_in_text=True)
+        all_unused_refs = all_refs_in_list.copy()
+        for element in all_refs_in_list:
+            if element[0] in all_refs_only_in_text:
+                all_unused_refs.remove(element)
+
+        # Отобразим их на экране для информации.
+        if len(all_unused_refs):
+            self.ui.refs_not_used.setStyleSheet("color: rgb(255, 0, 0);")
+            self.ui.refs_not_used.setPlainText('\n'.join([x[2] for x in all_unused_refs]))
+        else:
+            self.ui.refs_not_used.setStyleSheet("color: rgb(0, 0, 0);")
+            self.ui.refs_not_used.setPlainText(TEXT_NO_INFORMATION)
+
         # В итоге обрабатываем только те ссылки,
         # для которых есть запись в списке литературы:
-        refs_result = mydocfuncs.replace_ref_paragraphs(doc_object, good_ordered_refs, all_refs_list)
+        refs_result = mydocfuncs.replace_ref_paragraphs(doc_object, good_ordered_refs, all_refs_in_list)
         self.ui.refs_result.setPlainText('\n'.join(refs_result))
 
         # Выведем для информации на форму список ссылок из текста (ошибки),
@@ -100,9 +117,11 @@ class MyWindow(QtWidgets.QMainWindow):
             for element in errors:
                 errors_in_text = errors_in_text + element + '\n'
 
+            self.ui.refs_error.setStyleSheet("color: rgb(255, 0, 0);")
             self.ui.refs_error.setPlainText(errors_in_text)
         else:
-            self.ui.refs_error.setPlainText("- нет -")
+            self.ui.refs_error.setStyleSheet("color: rgb(0, 0, 0);")
+            self.ui.refs_error.setPlainText(TEXT_NO_INFORMATION)
 
         # Сохраним копию документа с исправленными ссылками:
         mydocfuncs.save_docx_object(doc_object, file_dst_name)
