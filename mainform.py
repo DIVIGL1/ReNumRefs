@@ -3,8 +3,10 @@
 import os
 import sys
 import time
+import threading
 
 from PyQt5 import QtGui, QtWidgets
+from PyQt5.QtCore import pyqtSignal, QObject
 
 from myconstants import *
 import mydocfuncs
@@ -14,13 +16,131 @@ from myutils import (
 )
 
 
-class QtMainWindow(myQt_form.Ui_MainWindow):
+def thread(my_func):
+    """
+    Запускает функцию в отдельном потоке
+    """
+    def wrapper(*args, **kwargs):
+        my_thread = threading.Thread(target=my_func, args=args, kwargs=kwargs)
+        my_thread.start()
+    return wrapper
 
+
+class Communicate(QObject):
+    commander = pyqtSignal(str)
+
+
+@thread
+def document_processing(ui, doc_file):
+    ui.status_bar_secs = 0
+    ui.delay = 0
+    ui.delay = 0.05
+    ui.refs_not_used.setStyleSheet("color: rgb(0, 0, 0);")
+    ui.refs_error.setStyleSheet("color: rgb(0, 0, 0);")
+    ui.set_form_element_text("refs_found", "")
+    ui.set_form_element_text("refs_result", "")
+    ui.set_form_element_text("refs_not_used", TEXT_NO_INFORMATION)
+    ui.set_form_element_text("refs_error", TEXT_NO_INFORMATION)
+    ui.delay = 0.1
+
+    ui.set_form_element_text("status bar", "Начинаем...")
+    file_src_name = os.path.basename(doc_file)
+    file_dst_name = os.path.splitext(file_src_name)[0] + ' (new)' + os.path.splitext(file_src_name)[1]
+    ui.file_src.setText(file_src_name)
+    ui.file_dst.setText(file_dst_name)
+
+    file_src_name = doc_file
+    file_dst_name = os.path.splitext(file_src_name)[0] + ' (new)' + os.path.splitext(file_src_name)[1]
+
+    ui.set_form_element_text("status bar", "Открываем файл...")
+    doc_object = mydocfuncs.get_docx_object(doc_file)
+
+    ui.set_form_element_text("status bar", "Получаем список всех ссылок в документе...")
+    all_ordered_refs = mydocfuncs.get_all_refs(doc_object)
+
+    ui.set_form_element_text("status bar", "Получаем список всех ссылок в списке литературы...")
+    all_refs_in_list = mydocfuncs.find_refs_in_list(doc_object)
+
+    # Подготовим полный список ссылок и выведем его для информации на форму:
+    ui.set_form_element_text("status bar", "Обрабатываем список всех ссылок...")
+    full_list = ""
+    for element in all_refs_in_list:
+        full_list = full_list + element[2] + '\n'
+
+    ui.set_form_element_text("refs_found", full_list)
+
+    # В полном списке ссылок из текста могут оказаться ссылки,
+    # которых нет в списке литературы - это ошибки.
+    # Найдём их, сохраним и удалим.
+    ui.set_form_element_text("status bar", "Ищем ссылки, которых нет в списке литературы...")
+    all_only_refs_list = [x[0] for x in all_refs_in_list]
+    good_ordered_refs = all_ordered_refs.copy()
+    for element in all_ordered_refs:
+        if element not in all_only_refs_list:
+            good_ordered_refs.remove(element)
+
+    # В полном списке литературы могут оказаться ссылки,
+    # которые не используются в тексте. Найдём их:
+    ui.set_form_element_text("status bar", "Ищем литературу, на которую нет ссылок...")
+    all_refs_only_in_text = mydocfuncs.get_all_refs(doc_object, p_only_in_text=True)
+    all_unused_refs = []
+    for element in all_refs_in_list:
+        if element[0] in all_refs_only_in_text:
+            pass
+        else:
+            all_unused_refs.append(["", "", element[2]])
+
+    # Отобразим их на экране для информации.
+    if len(all_unused_refs):
+        ui.refs_not_used.setStyleSheet("color: rgb(255, 0, 0);")
+        ui.set_form_element_text("refs_not_used", '\n'.join([x[2] for x in all_unused_refs]))
+    else:
+        ui.refs_not_used.setStyleSheet("color: rgb(0, 0, 0);")
+        ui.set_form_element_text("refs_not_used", TEXT_NO_INFORMATION)
+
+    # В итоге обрабатываем только те ссылки,
+    # для которых есть запись в списке литературы:
+    ui.set_form_element_text("status bar", "Сортируем литературу и заменяем ссылки на номера...")
+    refs_result = mydocfuncs.replace_ref_paragraphs(doc_object, good_ordered_refs, all_refs_in_list)
+    ui.set_form_element_text("refs_result", '\n'.join(refs_result))
+
+    # Выведем для информации на форму список ссылок из текста (ошибки),
+    # для которых не нашлась соответствующая ссылка в списке литературы
+    # или по каким-то причинам не произошла замена:
+    ui.set_form_element_text("status bar", "Выведем ошибки замены...")
+    errors = mydocfuncs.get_refs_errors(doc_object, all_ordered_refs)
+    if errors:
+        errors_in_text = f"Не исправлено: {len(errors)} шт.:\n"
+        for element in errors:
+            errors_in_text = errors_in_text + element + '\n'
+
+        ui.refs_error.setStyleSheet("color: rgb(255, 0, 0);")
+        ui.refs_error.setPlainText(errors_in_text)
+        ui.set_form_element_text("refs_error", errors_in_text)
+    else:
+        ui.refs_error.setStyleSheet("color: rgb(0, 0, 0);")
+        ui.set_form_element_text("refs_error", TEXT_NO_INFORMATION)
+
+    # Сохраним копию документа с исправленными ссылками:
+    ui.set_form_element_text("status bar", "Сохраняем документ...")
+    mydocfuncs.save_docx_object(doc_object, file_dst_name)
+    ui.status_bar_secs = 3
+    ui.set_form_element_text("status bar", "Завершено")
+
+
+class QtMainWindow(myQt_form.Ui_MainWindow):
+    status_bar_secs = 0
+    delay = 0
     def __init__(self):
-        pass
+        self.parent = None
 
     def setup_form(self):
         pass
+
+    def set_form_element_text(self, element, text):
+        self.saved_text = text
+        self.parent.communicate.commander.emit(element)
+        time.sleep(self.delay)
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -30,6 +150,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.app = QtWidgets.QApplication(sys.argv)
         QtWidgets.QMainWindow.__init__(self, None)
         self.ui = QtMainWindow()
+        self.ui.parent = self
         self.ui.setupUi(self)
 
         self.ui.refs_found.setWordWrapMode(QtGui.QTextOption.NoWrap)
@@ -38,10 +159,31 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.refs_not_used.setWordWrapMode(QtGui.QTextOption.NoWrap)
         self.ui.progressBar.setValue(0)
 
+        self.communicate = Communicate()
+        self.communicate.commander.connect(lambda command: self.communication_handler(command))
+
         # Установим исходные (сохранённые) координаты и размеры:
         data = load_param(PARAMETER_SAVED_MAIN_WINDOW_POZ, "")
         if data:
             self.restoreGeometry(data)
+
+    def communication_handler(self, element):
+        self.ui.progressBar.setValue(self.ui.progressBar.value() + 1)
+        if element == "status bar":
+            self.ui.statusBar.showMessage(self.ui.saved_text, self.ui.status_bar_secs * 1000)
+            return
+        if element == "refs_found":
+            self.ui.refs_found.setPlainText(self.ui.saved_text)
+            return
+        if element == "refs_result":
+            self.ui.refs_result.setPlainText(self.ui.saved_text)
+            return
+        if element == "refs_error":
+            self.ui.refs_error.setPlainText(self.ui.saved_text)
+            return
+        if element == "refs_not_used":
+            self.ui.refs_not_used.setPlainText(self.ui.saved_text)
+            return
 
     def moveEvent(self, event):
         super(MyWindow, self).moveEvent(event)
@@ -56,114 +198,15 @@ class MyWindow(QtWidgets.QMainWindow):
 
     def dropEvent(self, event):
         self.ui.progressBar.setMinimum(0)
-        self.ui.progressBar.setMaximum(10)
+        self.ui.progressBar.setMaximum(19)
         self.ui.progressBar.setValue(0)
-        self.ui.statusBar.showMessage("Начинаем...")
         # Из полученных файлов выберем только с расширением docx:
         docx_files = [u.toLocalFile() for u in event.mimeData().urls() if u.toLocalFile()[-5:].lower() == FILE_EXTENSION.lower()]
 
         if not docx_files:
             return
 
-        file_src_name = os.path.basename(docx_files[0])
-        file_dst_name = os.path.splitext(file_src_name)[0] + ' (new)' + os.path.splitext(file_src_name)[1]
-        self.ui.file_src.setText(file_src_name)
-        self.ui.file_dst.setText(file_dst_name)
-
-        file_src_name = docx_files[0]
-        file_dst_name = os.path.splitext(file_src_name)[0] + ' (new)' + os.path.splitext(file_src_name)[1]
-        self.ui.progressBar.setValue(1)
-
-        self.ui.statusBar.showMessage("Открываем файл...")
-        time.sleep(0.2)
-        doc_object = mydocfuncs.get_docx_object(docx_files[0])
-        self.ui.progressBar.setValue(2)
-
-        self.ui.statusBar.showMessage("Получаем список всех ссылок в документе...")
-        time.sleep(0.2)
-        all_ordered_refs = mydocfuncs.get_all_refs(doc_object)
-        self.ui.progressBar.setValue(3)
-
-        self.ui.statusBar.showMessage("Получаем список всех ссылок в списке литературы...")
-        time.sleep(0.2)
-        all_refs_in_list = mydocfuncs.find_refs_in_list(doc_object)
-        self.ui.progressBar.setValue(4)
-
-        # Подготовим полный список ссылок и выведем его для информации на форму:
-        self.ui.statusBar.showMessage("Обрабатываем список всех ссылок...")
-        time.sleep(0.2)
-        full_list = ""
-        for element in all_refs_in_list:
-            full_list = full_list + element[2] + '\n'
-
-        self.ui.refs_found.setPlainText(full_list)
-        self.ui.progressBar.setValue(5)
-
-        # В полном списке ссылок из текста могут оказаться ссылки,
-        # которых нет в списке литературы - это ошибки.
-        # Найдём их, сохраним и удалим.
-        self.ui.statusBar.showMessage("Ищем ссылки, которых нет в списке литературы...")
-        time.sleep(0.2)
-        all_only_refs_list = [x[0] for x in all_refs_in_list]
-        good_ordered_refs = all_ordered_refs.copy()
-        for element in all_ordered_refs:
-            if element not in all_only_refs_list:
-                good_ordered_refs.remove(element)
-        self.ui.progressBar.setValue(6)
-
-        # В полном списке литературы могут оказаться ссылки,
-        # которые не используются в тексте. Найдём их:
-        self.ui.statusBar.showMessage("Ищем литературу, на которую нет ссылок...")
-        time.sleep(0.2)
-        all_refs_only_in_text = mydocfuncs.get_all_refs(doc_object, p_only_in_text=True)
-        all_unused_refs = []
-        for element in all_refs_in_list:
-            if element[0] in all_refs_only_in_text:
-                pass
-            else:
-                all_unused_refs.append(["", "", element[2]])
-
-        # Отобразим их на экране для информации.
-        if len(all_unused_refs):
-            self.ui.refs_not_used.setStyleSheet("color: rgb(255, 0, 0);")
-            self.ui.refs_not_used.setPlainText('\n'.join([x[2] for x in all_unused_refs]))
-        else:
-            self.ui.refs_not_used.setStyleSheet("color: rgb(0, 0, 0);")
-            self.ui.refs_not_used.setPlainText(TEXT_NO_INFORMATION)
-        self.ui.progressBar.setValue(7)
-
-        # В итоге обрабатываем только те ссылки,
-        # для которых есть запись в списке литературы:
-        self.ui.statusBar.showMessage("Сортируем литературу и заменяем ссылки на номера...")
-        time.sleep(1)
-        refs_result = mydocfuncs.replace_ref_paragraphs(doc_object, good_ordered_refs, all_refs_in_list)
-        self.ui.refs_result.setPlainText('\n'.join(refs_result))
-        self.ui.progressBar.setValue(8)
-
-        # Выведем для информации на форму список ссылок из текста (ошибки),
-        # для которых не нашлась соответствующая ссылка в списке литературы
-        # или по каким-то причинам не произошла замена:
-        self.ui.statusBar.showMessage("Выведем ошибки замены...")
-        time.sleep(0.2)
-        errors = mydocfuncs.get_refs_errors(doc_object, all_ordered_refs)
-        if errors:
-            errors_in_text = f"Не исправлено: {len(errors)} шт.:\n"
-            for element in errors:
-                errors_in_text = errors_in_text + element + '\n'
-
-            self.ui.refs_error.setStyleSheet("color: rgb(255, 0, 0);")
-            self.ui.refs_error.setPlainText(errors_in_text)
-        else:
-            self.ui.refs_error.setStyleSheet("color: rgb(0, 0, 0);")
-            self.ui.refs_error.setPlainText(TEXT_NO_INFORMATION)
-        self.ui.progressBar.setValue(9)
-
-        # Сохраним копию документа с исправленными ссылками:
-        self.ui.statusBar.showMessage("Сохраняем документ...")
-        time.sleep(0.2)
-        mydocfuncs.save_docx_object(doc_object, file_dst_name)
-        self.ui.progressBar.setValue(10)
-        self.ui.statusBar.showMessage("Завершено.")
+        document_processing(self.ui, docx_files[0])
 
 
 if __name__ == "__main__":

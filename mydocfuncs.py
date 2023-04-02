@@ -3,7 +3,6 @@ import docx
 from myconstants import *
 
 TEST_READ_FILE = r'C:\Test_folder\ТестоваяСтатья.docx'
-TEST_READ_FILE = r'C:\Test_folder\Test.docx'
 TEST_WRITE_FILE = r'C:\Test_folder\TestNew.docx'
 
 
