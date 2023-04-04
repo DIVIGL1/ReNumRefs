@@ -4,6 +4,7 @@ REFS_STOP_CHARS = ' ,];)'
 FILE_EXTENSION = '.docx'
 PARAMETER_SAVED_MAIN_WINDOW_POZ = "Позиция и размер MainWindow"
 TEXT_NO_INFORMATION = "- отсутствуют -"
+TEXT_APPENDIX_FOR_NEW_FILE = " (new)"
 
 
 __ALL__ = [
@@ -13,4 +14,5 @@ __ALL__ = [
     'FILE_EXTENSION',
     'PARAMETER_SAVED_MAIN_WINDOW_POZ',
     'TEXT_NO_INFORMATION',
+    'TEXT_APPENDIX_FOR_NEW_FILE',
 ]
