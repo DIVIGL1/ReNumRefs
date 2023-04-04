@@ -27,6 +27,8 @@ def get_all_refs(doc_object, p_only_in_text=False):
     # то проверяется начало строки и если в самом начале
     # стоит две "решётки", то строка игнорируется!
     found_refs_in_text = []
+
+    # Обработаем каждый параграф
     for one_paragraph in doc_object.paragraphs:
         paragraph_text = one_paragraph.text
         start_poz = paragraph_text.find(REFS_START_CHAR_IN_TEXT)
@@ -56,6 +58,8 @@ def get_all_refs(doc_object, p_only_in_text=False):
 
 def find_refs_in_list(doc_object):
     found_refs = []
+
+    # Обработаем каждый параграф
     for num_paragraph, one_paragraph in enumerate(doc_object.paragraphs):
         paragraph_text = one_paragraph.text.strip()
         if len(paragraph_text) > 2:
@@ -111,12 +115,15 @@ def collect_ref_parts_in_one_run_and_replace(one_paragraph, old_ref, new_ref):
                     break
 
 
-def replace_ref_paragraphs(doc_object, ordered_refs, refs_list):
+def replace_ref_paragraphs(ui, doc_object, ordered_refs, refs_list):
     refs_result = []
     # Переберём все параграфы из списка литературы и расположим
     # их в том порядке в каком на них встречаются ссылки в тексте:
+    ui.progressBar2.setMinimum(0)
+    ui.progressBar2.setMaximum(len(ordered_refs))
     for num_ref, one_ref in enumerate(ordered_refs):
         paragraph_poz = refs_list[num_ref][1]
+        ui.progressBar2.setValue(ui.progressBar2.value() + 1)
         for one_paragraph in refs_list:
             if one_paragraph[0] == one_ref:
                 new_paragraph_text = one_paragraph[2]
