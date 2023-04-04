@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(700, 690)
-        MainWindow.setMinimumSize(QtCore.QSize(700, 690))
-        MainWindow.setMaximumSize(QtCore.QSize(700, 690))
+        MainWindow.resize(700, 700)
+        MainWindow.setMinimumSize(QtCore.QSize(700, 700))
+        MainWindow.setMaximumSize(QtCore.QSize(700, 700))
         MainWindow.setAcceptDrops(True)
         MainWindow.setWindowTitle("[ Замена ссылок в соответствии с их очерёдностью ]")
         MainWindow.setToolTip("")
@@ -124,13 +124,38 @@ class Ui_MainWindow(object):
         self.refs_not_used.setReadOnly(True)
         self.refs_not_used.setPlainText("Выберите файл в браузере и с помощью мышки \"бросьте\" его на эту форму.")
         self.refs_not_used.setObjectName("refs_not_used")
-        self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(10, 650, 716, 16))
-        self.progressBar.setMinimumSize(QtCore.QSize(716, 0))
-        self.progressBar.setMaximumSize(QtCore.QSize(716, 16777215))
-        self.progressBar.setProperty("value", 24)
-        self.progressBar.setFormat("")
-        self.progressBar.setObjectName("progressBar")
+        self.progressBar1 = QtWidgets.QProgressBar(self.centralwidget)
+        self.progressBar1.setGeometry(QtCore.QRect(10, 645, 681, 23))
+        self.progressBar1.setMinimumSize(QtCore.QSize(0, 0))
+        self.progressBar1.setMaximumSize(QtCore.QSize(716, 16777215))
+        self.progressBar1.setStyleSheet("QProgressBar {\n"
+"    border: 1px solid #d5d5d5;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"QProgressBar::chunk {\n"
+"    background-color: #d5d5d5;\n"
+"    width: 20px;\n"
+"}")
+        self.progressBar1.setProperty("value", 24)
+        self.progressBar1.setFormat("")
+        self.progressBar1.setObjectName("progressBar1")
+        self.progressBar2 = QtWidgets.QProgressBar(self.centralwidget)
+        self.progressBar2.setGeometry(QtCore.QRect(10, 670, 681, 10))
+        self.progressBar2.setMinimumSize(QtCore.QSize(0, 0))
+        self.progressBar2.setMaximumSize(QtCore.QSize(716, 16777215))
+        self.progressBar2.setStyleSheet("QProgressBar {\n"
+"    border: 1px solid #d5d5d5;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"QProgressBar::chunk {\n"
+"    background-color: #d5d5d5;\n"
+"    width: 20px;\n"
+"}")
+        self.progressBar2.setProperty("value", 24)
+        self.progressBar2.setFormat("")
+        self.progressBar2.setObjectName("progressBar2")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
