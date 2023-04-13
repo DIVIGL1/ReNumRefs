@@ -121,13 +121,15 @@ def replace_ref_paragraphs(ui, doc_object, ordered_refs, refs_list):
     # их в том порядке в каком на них встречаются ссылки в тексте:
     ui.progressBar2.setMinimum(0)
     ui.progressBar2.setMaximum(len(ordered_refs))
+    left_delimiter = ui.befor_num.text()
+    right_delimiter = ui.after_num.text()
     for num_ref, one_ref in enumerate(ordered_refs):
         paragraph_poz = refs_list[num_ref][1]
         ui.progressBar2.setValue(ui.progressBar2.value() + 1)
         for one_paragraph in refs_list:
             if one_paragraph[0] == one_ref:
                 new_paragraph_text = one_paragraph[2]
-                new_paragraph_text = f"{num_ref + 1}. {new_paragraph_text[(len(one_ref)):].strip()}"
+                new_paragraph_text = f"{left_delimiter}{num_ref + 1}{right_delimiter} {new_paragraph_text[(len(one_ref)):].strip()}"
                 update_paragraph(doc_object.paragraphs[paragraph_poz], new_paragraph_text)
                 replace_refs_in_doc(doc_object, one_ref, f"{num_ref + 1}")
                 refs_result.append(new_paragraph_text)
