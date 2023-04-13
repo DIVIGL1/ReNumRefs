@@ -45,10 +45,47 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>30</y>
-      <width>681</width>
+      <y>27</y>
+      <width>311</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>240</red>
+          <green>240</green>
+          <blue>240</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>255</red>
+          <green>255</green>
+          <blue>255</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>240</red>
+          <green>240</green>
+          <blue>240</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
     </property>
     <property name="toolTip">
      <string notr="true"/>
@@ -88,9 +125,9 @@
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>361</width>
+      <x>330</x>
+      <y>10</y>
+      <width>341</width>
       <height>16</height>
      </rect>
     </property>
@@ -107,11 +144,48 @@
    <widget class="QLineEdit" name="file_dst">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>681</width>
+      <x>330</x>
+      <y>27</y>
+      <width>361</width>
       <height>21</height>
      </rect>
+    </property>
+    <property name="palette">
+     <palette>
+      <active>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>240</red>
+          <green>240</green>
+          <blue>240</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </active>
+      <inactive>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>240</red>
+          <green>240</green>
+          <blue>240</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </inactive>
+      <disabled>
+       <colorrole role="Base">
+        <brush brushstyle="SolidPattern">
+         <color alpha="255">
+          <red>240</red>
+          <green>240</green>
+          <blue>240</blue>
+         </color>
+        </brush>
+       </colorrole>
+      </disabled>
+     </palette>
     </property>
     <property name="toolTip">
      <string notr="true"/>
@@ -133,7 +207,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>110</y>
+      <y>53</y>
       <width>381</width>
       <height>16</height>
      </rect>
@@ -174,7 +248,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>130</y>
+      <y>70</y>
       <width>681</width>
       <height>181</height>
      </rect>
@@ -211,7 +285,7 @@
     <property name="geometry">
      <rect>
       <x>560</x>
-      <y>550</y>
+      <y>547</y>
       <width>131</width>
       <height>91</height>
      </rect>
@@ -245,9 +319,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>340</y>
+      <y>303</y>
       <width>681</width>
-      <height>181</height>
+      <height>191</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -279,7 +353,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
+      <y>286</y>
       <width>321</width>
       <height>16</height>
      </rect>
@@ -320,7 +394,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>550</y>
+      <y>547</y>
       <width>541</width>
       <height>91</height>
      </rect>
@@ -426,6 +500,130 @@ QProgressBar::chunk {
     </property>
     <property name="format">
      <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>267</y>
+      <width>221</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Ограничители номера строки слева:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="befor_num">
+    <property name="geometry">
+     <rect>
+      <x>230</x>
+      <y>266</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string notr="true"/>
+    </property>
+    <property name="statusTip">
+     <string notr="true"/>
+    </property>
+    <property name="whatsThis">
+     <string notr="true"/>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>279</x>
+      <y>267</y>
+      <width>51</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>справа:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="after_num">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>266</y>
+      <width>31</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="toolTip">
+     <string notr="true"/>
+    </property>
+    <property name="statusTip">
+     <string notr="true"/>
+    </property>
+    <property name="whatsThis">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>.</string>
+    </property>
+    <property name="readOnly">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="Line" name="line">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>250</y>
+      <width>701</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="del_unused_refs">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>508</y>
+      <width>541</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Удалить из списка литературы не использванную литературу</string>
+    </property>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>494</y>
+      <width>701</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
   </widget>
