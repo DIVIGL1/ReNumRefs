@@ -145,6 +145,9 @@ class MyWindow(QtWidgets.QMainWindow):
         if data:
             self.restoreGeometry(data)
 
+        self.ui.befor_num.setText(load_param(BEFORE_NUM_PART_SAVE_NAME, BEFORE_NUM_PART_DEFAULT_VALUE))
+        self.ui.after_num.setText(load_param(AFTER_NUM_PART_SAVE_NAME, AFTER_NUM_PART_DEFAULT_VALUE))
+
     def communication_handler(self, element):
         self.ui.progressBar1.setValue(self.ui.progressBar1.value() + 1)
         if element == "status bar":
@@ -221,6 +224,14 @@ class MyWindow(QtWidgets.QMainWindow):
         file_dst_name = os.path.splitext(file_src_name)[0] + TEXT_APPENDIX_FOR_NEW_FILE + os.path.splitext(file_src_name)[1]
 
         document_processing(self.ui, file_src_name, file_dst_name)
+
+    def keyReleaseEvent(self, event):
+        if self.ui.befor_num.isModified():
+            self.ui.befor_num.setModified(False)
+            save_param(BEFORE_NUM_PART_SAVE_NAME, self.ui.befor_num.text())
+        if self.ui.after_num.isModified():
+            self.ui.after_num.setModified(False)
+            save_param(AFTER_NUM_PART_SAVE_NAME, self.ui.after_num.text())
 
 
 if __name__ == "__main__":
