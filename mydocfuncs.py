@@ -14,6 +14,12 @@ def print_doc(doc_4_print):
 
 
 def update_paragraph(paragraph, new_text):
+    '''
+    Затирает в параграфе все пробеги (runs), а весь текст объединяет в одном (первом) пробеге.
+    :param paragraph: Ссылка на параграф.
+    :param new_text: Замещаемый текст.
+    :return:
+    '''
     for one_run in paragraph.runs:
         one_run.text = ''
 
@@ -23,6 +29,12 @@ def update_paragraph(paragraph, new_text):
 
 
 def get_all_refs(doc_object, p_only_in_text=False):
+    '''
+    Возвращает список всех кодов (##код), встречающихся в тексте.
+    :param doc_object: Загруженный документ WinWord.
+    :param p_only_in_text: Если True, то собираются коды только из текста - игнорируются коды в списке литературы.
+    :return: Список кодов.
+    '''
     # Если передан параметр p_only_in_text равный True,
     # то проверяется начало строки и если в самом начале
     # стоит две "решётки", то строка игнорируется!
@@ -57,6 +69,15 @@ def get_all_refs(doc_object, p_only_in_text=False):
 
 
 def find_refs_in_list(doc_object):
+    '''
+    Обрабатывает список литературы, который обычно располагается в конце документа.
+    :param doc_object: Загруженный документ WinWord
+    :return: Собранный список списков, содержащий информацию о литературе, содержащий:
+    1) код конкретного элемента из списка литературы (начинается с ##);
+    2) физический номер в списке в исходном загруженном тексте;
+    3) текстовое описание источника литературы, включая код.
+    '''
+
     found_refs = []
 
     # Обработаем каждый параграф
@@ -68,13 +89,20 @@ def find_refs_in_list(doc_object):
                     paragraph_text = paragraph_text.split(one_char)[0]
 
                 # После завершения цикла в переменной paragraph_text остаётся
-                # ссылка на этот параграф типа ##001 и она записывается на первом месте:
+                # ссылка на этот параграф типа ##001, которая записывается на первом месте в списке:
                 found_refs.append([paragraph_text, num_paragraph, one_paragraph.text.strip()])
 
     return found_refs
 
 
 def replace_refs_in_doc(doc_object, old_ref, new_ref):
+    '''
+    Меняет код ссылки на литературу, но её вычисленный номер.
+    :param doc_object: Загруженный документа WinWord.
+    :param old_ref: Старая ссылка (код = ##код)
+    :param new_ref: Вычисленный номер в спске литературы.
+    :return:
+    '''
     for one_paragraph in doc_object.paragraphs:
         collect_ref_parts_in_one_run_and_replace(one_paragraph, old_ref, new_ref)
         for one_run in one_paragraph.runs:
@@ -115,26 +143,57 @@ def collect_ref_parts_in_one_run_and_replace(one_paragraph, old_ref, new_ref):
                     break
 
 
-def replace_ref_paragraphs(ui, doc_object, ordered_refs, refs_list):
+def replace_ref_paragraphs(ui, doc_object, ordered_refs, refs_list, all_unused_refs):
+    '''
+    Сортировка списка литературы в той очерёдности, в которой встречаются ссылки в тексте документа.
+    :param ui: Ссылка на MainWindow.ui
+    :param doc_object: Ссылка на загруженный документа WinWord
+    :param ordered_refs: Список ссылок, встречающихся в тексте, для которых есть номер в списке литературы.
+    :param refs_list: Список с информацией о списке литературы: [##код, позиция в списке, текст]
+    :param all_unused_refs: все не используемые коды из списка литературы.
+    :return: Список текстовых описаний списка литературы.
+    '''
+
+    ui.progressBar2.setMinimum(0)
+    ui.progressBar2.setMaximum(len(ordered_refs) + (len(all_unused_refs) * ui.del_unused_refs.isChecked()))
+    left_delimiter = ui.befor_num.text()
+    right_delimiter = ui.after_num.text()
+
     refs_result = []
     # Переберём все параграфы из списка литературы и расположим
     # их в том порядке в каком на них встречаются ссылки в тексте:
-    ui.progressBar2.setMinimum(0)
-    ui.progressBar2.setMaximum(len(ordered_refs))
-    left_delimiter = ui.befor_num.text()
-    right_delimiter = ui.after_num.text()
+    # Пройдемся по ПОЛНОМУ отсортированному списку кодов:
     for num_ref, one_ref in enumerate(ordered_refs):
+        pFlag = (ui.del_unused_refs.isChecked() and one_ref in all_unused_refs)
         paragraph_poz = refs_list[num_ref][1]
         ui.progressBar2.setValue(ui.progressBar2.value() + 1)
+
         for one_paragraph in refs_list:
             if one_paragraph[0] == one_ref:
                 new_paragraph_text = one_paragraph[2]
-                new_paragraph_text = f"{left_delimiter}{num_ref + 1}{right_delimiter} {new_paragraph_text[(len(one_ref)):].strip()}"
+
+                if not pFlag:
+                    new_paragraph_text = f"{left_delimiter}{num_ref + 1}{right_delimiter} {new_paragraph_text[(len(one_ref)):].strip()}"
+
                 update_paragraph(doc_object.paragraphs[paragraph_poz], new_paragraph_text)
-                replace_refs_in_doc(doc_object, one_ref, f"{num_ref + 1}")
-                refs_result.append(new_paragraph_text)
+
+                if not pFlag:
+                    replace_refs_in_doc(doc_object, one_ref, f"{num_ref + 1}")
+                    refs_result.append(new_paragraph_text)
 
                 break
+
+    # Если установлен признак "удалить неиспользуемые ссылки", то обработаем их
+    if ui.del_unused_refs.isChecked():
+        for num_ref, one_ref in enumerate(all_unused_refs):
+            ui.progressBar2.setValue(ui.progressBar2.value() + 1)
+            for one_paragraph in doc_object.paragraphs:
+                if one_paragraph.text.find(one_ref) == 0:
+                    p = one_paragraph._p
+                    parent_element = p.getparent()
+                    parent_element.remove(p)
+
+                    break
 
     return refs_result
 

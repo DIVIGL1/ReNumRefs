@@ -25,3 +25,5 @@ __ALL__ = [
     'AFTER_NUM_PART_DEFAULT_VALUE',
     'AFTER_NUM_PART_SAVE_NAME',
 ]
+
+Version = "1.001.20230422:10"

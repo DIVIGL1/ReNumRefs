@@ -38,10 +38,12 @@ def document_processing(ui, file_src_name, file_dst_name):
     ui.set_form_element_text("status bar", "Получаем список всех ссылок в документе...")
     all_ordered_refs = mydocfuncs.get_all_refs(doc_object)
 
+    # Соберём список из которого состоит список литературы:
     ui.set_form_element_text("status bar", "Получаем список всех ссылок в списке литературы...")
     all_refs_in_list = mydocfuncs.find_refs_in_list(doc_object)
 
-    # Подготовим полный список ссылок и выведем его для информации на форму:
+    # Подготовим в виде текста полный список литературы
+    # и выведем его для информации на форму:
     ui.set_form_element_text("status bar", "Обрабатываем список всех ссылок...")
     full_list = ""
     for element in all_refs_in_list:
@@ -62,13 +64,15 @@ def document_processing(ui, file_src_name, file_dst_name):
     # В полном списке литературы могут оказаться ссылки,
     # которые не используются в тексте. Найдём их:
     ui.set_form_element_text("status bar", "Ищем литературу, на которую нет ссылок...")
+    # ... сначала получим полный список литературы в тексте
     all_refs_only_in_text = mydocfuncs.get_all_refs(doc_object, p_only_in_text=True)
+    # ... теперь проверим те, которые не используются
     all_unused_refs = []
     for element in all_refs_in_list:
         if element[0] in all_refs_only_in_text:
             pass
         else:
-            all_unused_refs.append(["", "", element[2]])
+            all_unused_refs.append([element[0], "", element[2]])
 
     # Отобразим их на экране для информации.
     if len(all_unused_refs):
@@ -79,7 +83,7 @@ def document_processing(ui, file_src_name, file_dst_name):
     # В итоге обрабатываем только те ссылки,
     # для которых есть запись в списке литературы:
     ui.set_form_element_text("status bar", "Сортируем литературу и заменяем ссылки на номера...")
-    refs_result = mydocfuncs.replace_ref_paragraphs(ui, doc_object, good_ordered_refs, all_refs_in_list)
+    refs_result = mydocfuncs.replace_ref_paragraphs(ui, doc_object, good_ordered_refs, all_refs_in_list, [x[0] for x in all_unused_refs])
     ui.set_form_element_text("refs_result", '\n'.join(refs_result))
 
     # Выведем для информации на форму список ссылок из текста (ошибки),
@@ -147,6 +151,7 @@ class MyWindow(QtWidgets.QMainWindow):
 
         self.ui.befor_num.setText(load_param(BEFORE_NUM_PART_SAVE_NAME, BEFORE_NUM_PART_DEFAULT_VALUE))
         self.ui.after_num.setText(load_param(AFTER_NUM_PART_SAVE_NAME, AFTER_NUM_PART_DEFAULT_VALUE))
+        # self.ui.del_unused_refs.setVisible(False)
 
     def communication_handler(self, element):
         self.ui.progressBar1.setValue(self.ui.progressBar1.value() + 1)
