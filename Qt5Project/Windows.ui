@@ -226,7 +226,7 @@
     <property name="geometry">
      <rect>
       <x>561</x>
-      <y>530</y>
+      <y>510</y>
       <width>131</width>
       <height>16</height>
      </rect>
@@ -285,9 +285,9 @@
     <property name="geometry">
      <rect>
       <x>560</x>
-      <y>547</y>
+      <y>527</y>
       <width>131</width>
-      <height>91</height>
+      <height>111</height>
      </rect>
     </property>
     <property name="minimumSize">
@@ -372,7 +372,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>530</y>
+      <y>510</y>
       <width>461</width>
       <height>16</height>
      </rect>
@@ -394,7 +394,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>547</y>
+      <y>527</y>
       <width>541</width>
       <height>91</height>
      </rect>
@@ -604,13 +604,13 @@ QProgressBar::chunk {
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>508</y>
+      <y>620</y>
       <width>541</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>Удалить из списка литературы не использванную литературу</string>
+     <string>Удалить не использванную литературу из списка литературы в итоговом файле</string>
     </property>
    </widget>
    <widget class="Line" name="line_2">
