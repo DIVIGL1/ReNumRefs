@@ -151,7 +151,11 @@ class MyWindow(QtWidgets.QMainWindow):
 
         self.ui.befor_num.setText(load_param(BEFORE_NUM_PART_SAVE_NAME, BEFORE_NUM_PART_DEFAULT_VALUE))
         self.ui.after_num.setText(load_param(AFTER_NUM_PART_SAVE_NAME, AFTER_NUM_PART_DEFAULT_VALUE))
-        # self.ui.del_unused_refs.setVisible(False)
+        self.ui.del_unused_refs.setChecked(load_param(DEL_UNUSED_REFS_SAVE_NAME, DEL_UNUSED_REFS_DEFAULT_VALUE))
+        self.ui.del_unused_refs.clicked.connect(self.on_click_checkboxes)
+
+    def on_click_checkboxes(self):
+        save_param(DEL_UNUSED_REFS_SAVE_NAME, self.ui.del_unused_refs.isChecked())
 
     def communication_handler(self, element):
         self.ui.progressBar1.setValue(self.ui.progressBar1.value() + 1)

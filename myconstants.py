@@ -12,6 +12,9 @@ BEFORE_NUM_PART_SAVE_NAME = "Символы перед номером"
 AFTER_NUM_PART_DEFAULT_VALUE = "."
 AFTER_NUM_PART_SAVE_NAME = "Символы после номера"
 
+DEL_UNUSED_REFS_DEFAULT_VALUE = False
+DEL_UNUSED_REFS_SAVE_NAME = "Удалить не использванную литературу из списка литературы в итоговом файле"
+
 __ALL__ = [
     'REFS_START_CHAR',
     'STOP_CHARS',
@@ -24,6 +27,8 @@ __ALL__ = [
     'BEFORE_NUM_PART_SAVE_NAME',
     'AFTER_NUM_PART_DEFAULT_VALUE',
     'AFTER_NUM_PART_SAVE_NAME',
+    'DEL_UNUSED_REFS_DEFAULT_VALUE',
+    'DEL_UNUSED_REFS_SAVE_NAME',
 ]
 
-Version = "1.001.20230422:10"
+Version = "1.002.20230425:21"
