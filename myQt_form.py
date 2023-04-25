@@ -213,6 +213,18 @@ class Ui_MainWindow(object):
         self.line.setObjectName("line")
         self.del_unused_refs = QtWidgets.QCheckBox(self.centralwidget)
         self.del_unused_refs.setGeometry(QtCore.QRect(10, 620, 541, 20))
+        self.del_unused_refs.setStyleSheet("QCheckBox::indicator {\n"
+"    border: 1px solid rgb(100, 100, 100);\n"
+"    width: 10px;\n"
+"    height: 10px;\n"
+"    border-radius: 0px;\n"
+"    background-color: rgb(240, 240, 240);\n"
+"}\n"
+"QCheckBox::indicator:checked {\n"
+"    border: 1px solid rgb(0, 0, 0);\n"
+"    background-color: rgb(55, 55, 55);\n"
+"}\n"
+"")
         self.del_unused_refs.setObjectName("del_unused_refs")
         self.line_2 = QtWidgets.QFrame(self.centralwidget)
         self.line_2.setGeometry(QtCore.QRect(0, 494, 701, 16))
