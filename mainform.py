@@ -73,6 +73,27 @@ def document_processing(ui, file_src_name, file_dst_name):
             pass
         else:
             all_unused_refs.append([element[0], "", element[2]])
+    # ... проверим в нём наличие дублей
+    all_dubls_refs = []
+    for search_element in all_refs_in_list:
+        element_counter = 0
+        for element in all_refs_in_list:
+            if search_element[0] == element[0]:
+                element_counter = element_counter + 1
+
+        if element_counter > 1:
+            all_dubls_refs.append(search_element[0])
+
+    all_dubls_refs = list(set(all_dubls_refs))
+    if len(all_dubls_refs) > 0:
+        if len(all_unused_refs):
+            errors_in_text = f"Дублей: {len(all_dubls_refs)} шт.:\n"
+            for element in all_dubls_refs:
+                errors_in_text = errors_in_text + element + '\n'
+
+            ui.set_form_element_text("refs_dubls", errors_in_text)
+        else:
+            ui.set_form_element_text("refs_dubls", TEXT_NO_INFORMATION)
 
     # Отобразим их на экране для информации.
     if len(all_unused_refs):
@@ -175,6 +196,13 @@ class MyWindow(QtWidgets.QMainWindow):
                 self.ui.refs_error.setStyleSheet("color: rgb(0, 0, 0);")
             else:
                 self.ui.refs_error.setStyleSheet("color: rgb(255, 0, 0);")
+        if element == "refs_dubls":
+            self.ui.refs_dubls.setPlainText(self.ui.saved_text)
+
+            if self.ui.saved_text == TEXT_NO_INFORMATION:
+                self.ui.refs_dubls.setStyleSheet("color: rgb(0, 0, 0);")
+            else:
+                self.ui.refs_dubls.setStyleSheet("color: rgb(255, 0, 0);")
 
             return
         if element == "refs_not_used":
@@ -213,10 +241,12 @@ class MyWindow(QtWidgets.QMainWindow):
         # "Обнулим" значения текстовых полей:
         self.ui.refs_not_used.setStyleSheet("color: rgb(0, 0, 0);")
         self.ui.refs_error.setStyleSheet("color: rgb(0, 0, 0);")
+        self.ui.refs_dubls.setStyleSheet("color: rgb(0, 0, 0);")
         self.ui.refs_found.setPlainText("")
         self.ui.refs_result.setPlainText("")
         self.ui.refs_not_used.setPlainText(TEXT_NO_INFORMATION)
         self.ui.refs_error.setPlainText(TEXT_NO_INFORMATION)
+        self.ui.refs_dubls.setPlainText(TEXT_NO_INFORMATION)
 
         # Выведем первое сообщение:
         self.ui.statusBar.showMessage("Начинаем. Открываем файл...")
