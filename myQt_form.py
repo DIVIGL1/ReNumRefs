@@ -14,9 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(700, 700)
-        MainWindow.setMinimumSize(QtCore.QSize(700, 700))
-        MainWindow.setMaximumSize(QtCore.QSize(700, 700))
+        MainWindow.resize(700, 740)
+        MainWindow.setMinimumSize(QtCore.QSize(700, 740))
+        MainWindow.setMaximumSize(QtCore.QSize(700, 740))
         MainWindow.setAcceptDrops(True)
         MainWindow.setWindowTitle("[ Замена ссылок в соответствии с их очерёдностью ]")
         MainWindow.setToolTip("")
@@ -83,7 +83,7 @@ class Ui_MainWindow(object):
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
-        self.label_4.setGeometry(QtCore.QRect(561, 510, 131, 16))
+        self.label_4.setGeometry(QtCore.QRect(560, 510, 131, 16))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
         self.refs_found.setObjectName("refs_found")
         self.refs_error = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.refs_error.setEnabled(True)
-        self.refs_error.setGeometry(QtCore.QRect(560, 527, 131, 111))
+        self.refs_error.setGeometry(QtCore.QRect(559, 527, 133, 51))
         self.refs_error.setMinimumSize(QtCore.QSize(0, 0))
         self.refs_error.setToolTip("")
         self.refs_error.setStatusTip("")
@@ -137,7 +137,7 @@ class Ui_MainWindow(object):
         self.label_6.setObjectName("label_6")
         self.refs_not_used = QtWidgets.QPlainTextEdit(self.centralwidget)
         self.refs_not_used.setEnabled(True)
-        self.refs_not_used.setGeometry(QtCore.QRect(10, 527, 541, 91))
+        self.refs_not_used.setGeometry(QtCore.QRect(10, 527, 541, 121))
         self.refs_not_used.setMinimumSize(QtCore.QSize(300, 0))
         self.refs_not_used.setToolTip("")
         self.refs_not_used.setStatusTip("")
@@ -147,7 +147,7 @@ class Ui_MainWindow(object):
         self.refs_not_used.setPlainText("Выберите файл в браузере и с помощью мышки \"бросьте\" его на эту форму.")
         self.refs_not_used.setObjectName("refs_not_used")
         self.progressBar1 = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar1.setGeometry(QtCore.QRect(10, 645, 681, 23))
+        self.progressBar1.setGeometry(QtCore.QRect(10, 675, 681, 23))
         self.progressBar1.setMinimumSize(QtCore.QSize(0, 0))
         self.progressBar1.setMaximumSize(QtCore.QSize(716, 16777215))
         self.progressBar1.setStyleSheet("QProgressBar {\n"
@@ -163,7 +163,7 @@ class Ui_MainWindow(object):
         self.progressBar1.setFormat("")
         self.progressBar1.setObjectName("progressBar1")
         self.progressBar2 = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar2.setGeometry(QtCore.QRect(10, 670, 681, 10))
+        self.progressBar2.setGeometry(QtCore.QRect(10, 700, 681, 10))
         self.progressBar2.setMinimumSize(QtCore.QSize(0, 0))
         self.progressBar2.setMaximumSize(QtCore.QSize(716, 16777215))
         self.progressBar2.setStyleSheet("QProgressBar {\n"
@@ -212,7 +212,7 @@ class Ui_MainWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.del_unused_refs = QtWidgets.QCheckBox(self.centralwidget)
-        self.del_unused_refs.setGeometry(QtCore.QRect(10, 620, 541, 20))
+        self.del_unused_refs.setGeometry(QtCore.QRect(10, 650, 541, 20))
         self.del_unused_refs.setStyleSheet("QCheckBox::indicator {\n"
 "    border: 1px solid rgb(100, 100, 100);\n"
 "    width: 10px;\n"
@@ -231,6 +231,23 @@ class Ui_MainWindow(object):
         self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
         self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line_2.setObjectName("line_2")
+        self.label_9 = QtWidgets.QLabel(self.centralwidget)
+        self.label_9.setGeometry(QtCore.QRect(559, 580, 131, 16))
+        font = QtGui.QFont()
+        font.setBold(True)
+        font.setWeight(75)
+        self.label_9.setFont(font)
+        self.label_9.setObjectName("label_9")
+        self.refs_dubls = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.refs_dubls.setEnabled(True)
+        self.refs_dubls.setGeometry(QtCore.QRect(559, 597, 133, 51))
+        self.refs_dubls.setMinimumSize(QtCore.QSize(0, 0))
+        self.refs_dubls.setToolTip("")
+        self.refs_dubls.setStatusTip("")
+        self.refs_dubls.setWhatsThis("")
+        self.refs_dubls.setStyleSheet("color: rgb(0, 0, 0);")
+        self.refs_dubls.setReadOnly(True)
+        self.refs_dubls.setObjectName("refs_dubls")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
@@ -253,6 +270,7 @@ class Ui_MainWindow(object):
         self.label_8.setText(_translate("MainWindow", "справа:"))
         self.after_num.setText(_translate("MainWindow", "."))
         self.del_unused_refs.setText(_translate("MainWindow", "Удалить не использванную литературу из списка литературы в итоговом файле"))
+        self.label_9.setText(_translate("MainWindow", "Дубли меток в списке:"))
 
 
 if __name__ == "__main__":
