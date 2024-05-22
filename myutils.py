@@ -26,3 +26,8 @@ def load_param(param_name, default="", filename="saved.pkl"):
     params_dict = get_all_params(filename=filename)
 
     return params_dict.get(param_name, default)
+
+
+def is_cyrillic_and_sort(s):
+    s = s[0].strip()
+    return (not 'А' <= s[0] <= 'я' or 'а' <= s[0] <= 'я', s[0])
