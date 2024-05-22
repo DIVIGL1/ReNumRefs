@@ -546,7 +546,7 @@ QProgressBar::chunk {
    <widget class="QLabel" name="label_8">
     <property name="geometry">
      <rect>
-      <x>279</x>
+      <x>270</x>
       <y>267</y>
       <width>51</width>
       <height>16</height>
@@ -565,7 +565,7 @@ QProgressBar::chunk {
    <widget class="QLineEdit" name="after_num">
     <property name="geometry">
      <rect>
-      <x>330</x>
+      <x>321</x>
       <y>266</y>
       <width>31</width>
       <height>21</height>
@@ -691,6 +691,33 @@ QCheckBox::indicator:checked {
     </property>
     <property name="readOnly">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="sotr_by_alphabetically">
+    <property name="geometry">
+     <rect>
+      <x>370</x>
+      <y>285</y>
+      <width>331</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QCheckBox::indicator {
+    border: 1px solid rgb(100, 100, 100);
+    width: 10px;
+    height: 10px;
+    border-radius: 0px;
+    background-color: rgb(240, 240, 240);
+}
+QCheckBox::indicator:checked {
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(55, 55, 55);
+}
+</string>
+    </property>
+    <property name="text">
+     <string>Сортировать литературу по алфавиту (сначала кириллица)</string>
     </property>
    </widget>
   </widget>

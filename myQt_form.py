@@ -193,14 +193,14 @@ class Ui_MainWindow(object):
         self.befor_num.setReadOnly(False)
         self.befor_num.setObjectName("befor_num")
         self.label_8 = QtWidgets.QLabel(self.centralwidget)
-        self.label_8.setGeometry(QtCore.QRect(279, 267, 51, 16))
+        self.label_8.setGeometry(QtCore.QRect(270, 267, 51, 16))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
         self.label_8.setFont(font)
         self.label_8.setObjectName("label_8")
         self.after_num = QtWidgets.QLineEdit(self.centralwidget)
-        self.after_num.setGeometry(QtCore.QRect(330, 266, 31, 21))
+        self.after_num.setGeometry(QtCore.QRect(321, 266, 31, 21))
         self.after_num.setToolTip("")
         self.after_num.setStatusTip("")
         self.after_num.setWhatsThis("")
@@ -248,6 +248,21 @@ class Ui_MainWindow(object):
         self.refs_dubls.setStyleSheet("color: rgb(0, 0, 0);")
         self.refs_dubls.setReadOnly(True)
         self.refs_dubls.setObjectName("refs_dubls")
+        self.sotr_by_alphabetically = QtWidgets.QCheckBox(self.centralwidget)
+        self.sotr_by_alphabetically.setGeometry(QtCore.QRect(370, 285, 331, 20))
+        self.sotr_by_alphabetically.setStyleSheet("QCheckBox::indicator {\n"
+"    border: 1px solid rgb(100, 100, 100);\n"
+"    width: 10px;\n"
+"    height: 10px;\n"
+"    border-radius: 0px;\n"
+"    background-color: rgb(240, 240, 240);\n"
+"}\n"
+"QCheckBox::indicator:checked {\n"
+"    border: 1px solid rgb(0, 0, 0);\n"
+"    background-color: rgb(55, 55, 55);\n"
+"}\n"
+"")
+        self.sotr_by_alphabetically.setObjectName("sotr_by_alphabetically")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
@@ -271,6 +286,7 @@ class Ui_MainWindow(object):
         self.after_num.setText(_translate("MainWindow", "."))
         self.del_unused_refs.setText(_translate("MainWindow", "Удалить не использванную литературу из списка литературы в итоговом файле"))
         self.label_9.setText(_translate("MainWindow", "Дубли меток в списке:"))
+        self.sotr_by_alphabetically.setText(_translate("MainWindow", "Сортировать литературу по алфавиту (сначала кириллица)"))
 
 
 if __name__ == "__main__":
