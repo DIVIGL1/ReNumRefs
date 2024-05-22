@@ -1,6 +1,6 @@
 REFS_START_CHAR = "##"
 REFS_START_CHAR_IN_TEXT = "##"
-REFS_STOP_CHARS = ' ,];)'
+REFS_STOP_CHARS = ' ,];\xa0)'
 FILE_EXTENSION = '.docx'
 PARAMETER_SAVED_MAIN_WINDOW_POZ = "Позиция и размер MainWindow"
 TEXT_NO_INFORMATION = "- отсутствуют -"
@@ -13,7 +13,10 @@ AFTER_NUM_PART_DEFAULT_VALUE = "."
 AFTER_NUM_PART_SAVE_NAME = "Символы после номера"
 
 DEL_UNUSED_REFS_DEFAULT_VALUE = False
-DEL_UNUSED_REFS_SAVE_NAME = "Удалить не использванную литературу из списка литературы в итоговом файле"
+DEL_UNUSED_REFS_SAVE_NAME = "Удалить не использованную литературу из списка литературы в итоговом файле"
+
+SORT_ALPH_DEFAULT_VALUE = False
+SORT_ALPH_SAVE_NAME = "Сортировать в алфавитном порядке, но кириллица сначала"
 
 __ALL__ = [
     'REFS_START_CHAR',
@@ -29,6 +32,8 @@ __ALL__ = [
     'AFTER_NUM_PART_SAVE_NAME',
     'DEL_UNUSED_REFS_DEFAULT_VALUE',
     'DEL_UNUSED_REFS_SAVE_NAME',
+    'SORT_ALPH_DEFAULT_VALUE',
+    'SORT_ALPH_SAVE_NAME',
 ]
 
-Version = "1.002.20230425:21"
+Version = "1.003.20240523:01"
